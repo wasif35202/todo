@@ -1,101 +1,70 @@
-import Image from "next/image";
+"use client"
+import { useState } from "react";
+
+interface Task {
+  task: string;
+  time: string;
+  date: string;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [Task, setTask] = useState<Task[]>([])
+  const handleFormData = (event: any) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    const newTask = {
+      task: formData.get("task") || "",
+      time: formData.get("time") || "",
+      date: formData.get("date") || "",
+    }
+
+
+    setTask((prevTask: any) => [...prevTask, newTask])
+
+    event.currentTarget.reset()
+    console.log(formData)
+    console.log(Task)
+  }
+  return (
+    <div className=" p-5  bg-slate-500 text-white ">
+      <h1 className="text-center">To Do App</h1>
+      <div className="">
+
+       
+          <form onSubmit={handleFormData} className="h-1/2 w-full border flex flex-col gap-2 justify-around items-start p-5" >
+
+            <label htmlFor="task">Write Your Todos</label>
+            <textarea name="task" className="bg-transparent rounded-lg border " />
+            <label htmlFor="time">Write When Todo</label>
+            <input name="time" className="bg-transparent rounded-lg border" type="time" />
+            <label htmlFor="date">Write Date</label>
+            <input name="date" className="bg-transparent rounded-lg border" type="date" />
+            <button type="submit" className="border rounded-lg">Add Task</button>
+
+          </form>
+        
+
+
+        <div className="flex flex-col border">
+          <h2 className="mt-4 bg-white text-black">Tasks:</h2>
+          <ul>
+            {Task.map((task, index) => (
+              <li key={index} className="bg-black text-white p-5 mt-5">
+                <h1 className="bg-yellow-500 text-black"># {index + 1}</h1>
+                <p>Task: {task.task}</p>
+                <p>Time: {task.time}</p>
+                <p>Date: {task.date}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+
+      </div>
+
+
     </div>
+
   );
 }
